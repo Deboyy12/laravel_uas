@@ -1,0 +1,40 @@
+/* style.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4; /* Sesuaikan dengan kebutuhan */
+}
+
+.min-h-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Memastikan logo tepat di tengah */
+    z-index: -1; /* Agar logo berada di bawah konten */
+}
+
+.watermark img {
+    width: 150px; /* Atur ukuran logo sesuai kebutuhan */
+    height: auto;
+}
+
+.container {
+    z-index: 1; /* Menempatkan form dan konten lainnya di atas logo */
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
