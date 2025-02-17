@@ -9,7 +9,7 @@
 
 ## Laravel Project
 
-Panduan instalasi untuk proyek Laravel yang meliputi instalasi Laravel Breeze, proteksi XSS, logo sebagai watermark, pembuatan QR Code, dan integrasi reCAPTCHA di Laravel.
+Proyek Laravel yang meliputi instalasi Laravel Breeze, proteksi XSS, logo sebagai watermark, pembuatan QR Code untuk tanda tangan digital, dan integrasi reCAPTCHA di Laravel.
 
 ### Soal 8: Laravel Breeze
 
@@ -35,8 +35,8 @@ composer require laravel/breeze --dev
 php artisan breeze:install
 ```
 
-3. Instalasi Dependensi Frontend
-Setelah Laravel Breeze terpasang, jalankan perintah berikut untuk menginstal dependensi frontend (Opsional):
+3. Instalasi Dependensi Frontend (Opsional)
+Setelah Laravel Breeze terpasang, jalankan perintah berikut untuk menginstal dependensi frontend:
 ```
 npm install
 npm run dev
