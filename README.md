@@ -60,7 +60,7 @@ php artisan migrate
 ```
 php artisan serve
 ```
-Akses aplikasi di http://127.0.0.1:8000.
+Akses aplikasi di http://127.0.0.1:8000 atau tekan ctrl+click pada url
 
 
 ### Soal 9: Proteksi XSS 
@@ -69,7 +69,38 @@ Akses aplikasi di http://127.0.0.1:8000.
 php artisan make:middleware XSSProtection
 ```
 Buka file app/Http/Middleware/XSSProtection.php dan ubah isinya menjadi:
-&&&
+```
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class XSSProtection
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $input = $request->all();
+
+        array_walk_recursive($input, function (&$value) {
+            $value = strip_tags($value); // Menghapus tag HTML berbahaya
+            $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); // Mencegah injeksi script
+        });
+
+        $request->merge($input);
+
+        return $next($request);
+    }
+}
+```
 
 
 2. Daftarkan Middleware
@@ -307,7 +338,7 @@ Buat file resources/views/codeqr.blade.php dengan isi berikut:
 
 Akses di browser untuk melihat QR Code yang berisi data tanda tangan digital: http://localhost/codeqr
 
-catatan: tanda tangan digital saya upload berupa sebuah pdf data diri pada google drive
+Catatan: Tanda tangan digital nya saya sisipkan pada file PDF yang berisi data diri yang diunggah ke Google Drive atau bisa juga file lainnya asalkan memiliki URL, sehingga file tersebut dapat diakses melalui URL yang yang berisi tanda tangan digital saat lakukan scan pada QR Code (Yang saya gunakan). Cara lainnya, tanda tangan digital dapat digambar atau dimasukkan secara langsung pada elemen HTML canvas yang di buat, tanpa memerlukan file eksternal dan URL yang berisi tanda tangan digital.
 
 Tampilan input:
 ![Alt Text](public/images/qrcodeinput.png)
@@ -325,28 +356,30 @@ Kunjungi halaman Google reCAPTCHA.
 Pilih jenis reCAPTCHA (misalnya v2 Checkbox).
 Daftarkan nama situs web Anda dan tambahkan domain seperti localhost untuk pengembangan lokal.
 Dapatkan Site Key dan Secret Key.
-&&&
 
 2. Instalasi Paket Mews\Captcha
 Instal paket Mews\Captcha dengan Composer:
+
 ```
 composer require mews/captcha
 ```
 
 3. Publikasikan Konfigurasi
 Publikasikan konfigurasi dengan perintah:
+
 ```
 php artisan vendor:publish --provider="Mews\Captcha\CaptchaServiceProvider"
 ```
 
 4. Konfigurasi .env untuk reCAPTCHA
 Tambahkan kunci reCAPTCHA yang Anda dapatkan sebelumnya di file .env:
+
 ```
 RECAPTCHA_SITE_KEY=6LdjrdgqAAAAAIXq_TAyo4xRQgjljj6qEwxhDNlP
 RECAPTCHA_SECRET_KEY=6LdjrdgqAAAAAL0XqR1jAK_cybWl699hohIcyxpN
-``
+```
 
-6. Menyiapkan Route untuk Menampilkan dan Refresh Captcha
+5. Menyiapkan Route untuk Menampilkan dan Refresh Captcha
 Tambahkan route di routes/web.php untuk menampilkan dan me-refresh captcha tanpa me-reload halaman:
 ```
 Route::get('/captcha', function () {
@@ -521,12 +554,9 @@ Route::get('/refresh-captcha', function (Request $request) {
 });
 ```
 
-Akses halaman registrasi di http://localhost:8000/login.
+Akses halaman registrasi atau login di http://localhost:8000/login.
 ![Alt Text](public/images/loginwmcaptcha.png)
 
-
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
